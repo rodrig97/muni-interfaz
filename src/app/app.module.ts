@@ -5,19 +5,36 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { HttpClient } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoginComponent } from './sistema/pages/login/login.component';
+import { MesaTramiteComponent } from './sistema/pages/mesa-tramite/mesa-tramite.component';
+import { AreaService } from './servicios/areas.service';
+import { FilesService } from './servicios/files.service';
+import { ServerPageComponent } from './sistema/pages/server-page/server-page.component';
+import {TableModule} from 'primeng/table';
+import { ButtonModule } from "primeng/button";
+//import { CustomerService } from './sistema/formularios/customerservice';
+import {InputTextModule} from 'primeng/inputtext';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    MesaTramiteComponent,
+    ServerPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule
   ],
-  providers: [],
+  providers: [AreaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

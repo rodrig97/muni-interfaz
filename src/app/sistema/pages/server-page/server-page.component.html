@@ -1,0 +1,103 @@
+<img src="../../../../assets/img/mpilo_logo.png" alt="" weight="90px" height="90px" class="img1">
+<hr>
+<mat-card class="table-card">
+    <p-table #dt [columns]="cols" [value]="products" (sortFunction)="customSort($event)" [customSort]="true" selectionMode="multiple" [(selection)]="selectedProducts" responsiveLayout="scroll" [exportHeader]="'customExportHeader'" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,15,20]"><h4>Mesa de Partes</h4>
+    <ng-template pTemplate="caption">
+        <div class="flex">
+            <button type="button" pButton pRipple icon="pi pi-file" (click)="dt.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2"  pTooltip="XLS" tooltipPosition="bottom"></button>
+            <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+            <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})" class="p-button-info ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="caption">
+        <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Search keyword" />
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th pSortableColumn="{{col.header}}" *ngFor="let col of columns">
+                {{col.header}} <p-sortIcon field="code"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+</mat-card>
+
+
+
+
+<!--
+<p-table [value]="products">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>TipoDoc</th>
+            <th>Nro</th>
+            <th>Asunto</th>
+            <th>PDF</th>
+            <th>Solicitante</th>
+            <th>RUC/DNI</th>
+            <th>Sisgedo</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Accion</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-products>
+        <tr>
+            <td>{{products.TipoDoc}}</td>
+            <td>{{products.Nro}}</td>
+            <td>{{products.Asunto}}</td>
+            <td>{{products.PDF}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+-->
+
+
+
+<!--
+    <p-table [value]="customers" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Tipo doc.</th>
+                <th>Nro</th>
+                <th>Asunto</th>
+                <th>PDF</th>
+                <th>Solicitante</th>
+                <th>RUC/DNI</th>
+                <th>Sisgedo</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Accion</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customer>
+            <tr>
+                <td>{{customer.name}}</td>
+                <td>{{customer.country.name}}</td>
+                <td>{{customer.company}}</td>
+                <td>{{customer.representative.name}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-table>
+-->
