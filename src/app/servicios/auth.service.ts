@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+};
+const backendApi = environment.backendApi;
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class LoginService {
-   
-    private backendApi = environment.backendApi;
-    
-    constructor(private http: HttpClient) {
-    
-    }
+  
+  constructor(private http: HttpClient) {}
 
-    login() {
-        return this.http.get(
-            `${this.backendApi}/login`,
-        );
-      }
-    }
+  login(data: any): Observable<any> {
+    return this.http.post(`${backendApi}/auth/login`, data);
+  }
+}
