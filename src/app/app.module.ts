@@ -16,15 +16,19 @@ import {TableModule} from 'primeng/table';
 import { ButtonModule } from "primeng/button";
 //import { CustomerService } from './sistema/formularios/customerservice';
 import {InputTextModule} from 'primeng/inputtext';
+import { DialogDniComponent } from './sistema/componentes/dialog-dni/dialog-dni.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MesaTramiteComponent,
-    ServerPageComponent
+    ServerPageComponent,
+    DialogDniComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     MaterialModule,
     FormsModule,

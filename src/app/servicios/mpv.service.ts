@@ -14,8 +14,19 @@ export class MPVService {
     constructor(private http: HttpClient) {
     
     }
+    public getAllDataMPV(){
+        return this.http.get(`${this.backendApi}/mpvirtual`);
+    }
 
     public saveTramiteSGD(data:any){
         return this.http.post(`${this.backendApi}/mpvirtual/sendtramite/`, data);
+    }
+
+    public sendMailCustom(req: Request){
+        return this.http.post(`${this.backendApi}/mpvirtual/sendmailcustom`, req);
+    }
+
+    public enviarCorreo(req: Request, expe_id: any, content: any, mode: any){
+        return this.http.post(`${this.backendApi}/reclamos/presentar`, req);
     }
 }

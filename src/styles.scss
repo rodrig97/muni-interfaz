@@ -62,6 +62,7 @@ h6 {
         cursor: pointer;
         background-color:#6a931c;
     }
+    
 }
 
 .form-group {
@@ -107,4 +108,10 @@ h6 {
 
 .btn-primary {
     border-color: white !important;
+}
+
+mat-dialog-container {
+    padding: 0px !important;
+    overflow: hidden !important;
+    background-color:#000000 !important;
 }

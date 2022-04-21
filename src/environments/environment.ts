@@ -6,6 +6,8 @@ export const environment = {
   production: false,
   backend: 'http://127.0.0.1:8000',
   backendApi: 'http://127.0.0.1:8000/api',
+  backendpdfs: 'http://127.0.0.1:8000/pdfs',
+  
 };
 
 /*

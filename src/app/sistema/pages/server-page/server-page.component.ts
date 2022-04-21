@@ -7,12 +7,19 @@ import * as autoTable from 'jspdf-autotable';
 //import { ProductSmall } from '../../../assets/products-small';
 //import * as data from '../../assets/products-SVGAnimatedLengthList.json';
 import { SortEvent } from 'primeng/api';
+//import { DocumentosService } from 'src/app/servicios/documentos.service';
+import { MPVService } from 'src/app/servicios/mpv.service';
+import { environment } from 'src/environments/environment';
+//MPVService
+
+
 @Component({
   selector: 'app-server-page',
   templateUrl: './server-page.component.html',
   styleUrls: ['./server-page.component.scss'],
 })
 export class ServerPageComponent implements OnInit {
+  backendpdfs = environment.backendpdfs;
   first = 0;
   rows = 10;
 
@@ -22,7 +29,7 @@ export class ServerPageComponent implements OnInit {
       code: 'f230fh0g3',
       name: 'Bamboo Watch',
       description: 'Product Description',
-      image: 'bamboo-watch.jpg',
+      document: 'bamboo-watch.pdf',
       price: 65,
       category: 'Accessories',
       quantity: 24,
@@ -34,7 +41,7 @@ export class ServerPageComponent implements OnInit {
       code: 'nvklal433',
       name: 'Black Watch',
       description: 'Product Description',
-      image: 'black-watch.jpg',
+      document: 'black-watch.pdf',
       price: 72,
       category: 'Accessories',
       quantity: 61,
@@ -46,7 +53,7 @@ export class ServerPageComponent implements OnInit {
       code: 'zz21cz3c1',
       name: 'Blue Band',
       description: 'Product Description',
-      image: 'blue-band.jpg',
+      document: 'blue-band.pdf',
       price: 79,
       category: 'Fitness',
       quantity: 2,
@@ -58,7 +65,7 @@ export class ServerPageComponent implements OnInit {
       code: '244wgerg2',
       name: 'Blue T-Shirt',
       description: 'Product Description',
-      image: 'blue-t-shirt.jpg',
+      document: 'blue-t-shirt.pdf',
       price: 29,
       category: 'Clothing',
       quantity: 25,
@@ -70,7 +77,7 @@ export class ServerPageComponent implements OnInit {
       code: 'h456wer53',
       name: 'Bracelet',
       description: 'Product Description',
-      image: 'bracelet.jpg',
+      document: 'bracelet.pdf',
       price: 15,
       category: 'Accessories',
       quantity: 73,
@@ -82,7 +89,7 @@ export class ServerPageComponent implements OnInit {
       code: 'av2231fwg',
       name: 'Brown Purse',
       description: 'Product Description',
-      image: 'brown-purse.jpg',
+      document: 'brown-purse.pdf',
       price: 120,
       category: 'Accessories',
       quantity: 0,
@@ -94,7 +101,7 @@ export class ServerPageComponent implements OnInit {
       code: 'bib36pfvm',
       name: 'Chakra Bracelet',
       description: 'Product Description',
-      image: 'chakra-bracelet.jpg',
+      document: 'chakra-bracelet.pdf',
       price: 32,
       category: 'Accessories',
       quantity: 5,
@@ -106,7 +113,7 @@ export class ServerPageComponent implements OnInit {
       code: 'mbvjkgip5',
       name: 'Galaxy Earrings',
       description: 'Product Description',
-      image: 'galaxy-earrings.jpg',
+      document: 'galaxy-earrings.pdf',
       price: 34,
       category: 'Accessories',
       quantity: 23,
@@ -118,7 +125,7 @@ export class ServerPageComponent implements OnInit {
       code: 'vbb124btr',
       name: 'Game Controller',
       description: 'Product Description',
-      image: 'game-controller.jpg',
+      document: 'game-controller.pdf',
       price: 99,
       category: 'Electronics',
       quantity: 2,
@@ -130,7 +137,7 @@ export class ServerPageComponent implements OnInit {
       code: 'cm230f032',
       name: 'Gaming Set',
       description: 'Product Description',
-      image: 'gaming-set.jpg',
+      document: 'gaming-set.pdf',
       price: 299,
       category: 'Electronics',
       quantity: 63,
@@ -146,21 +153,52 @@ export class ServerPageComponent implements OnInit {
   cols: any = [];
 
   exportColumns: any = [];
+  documentos:any=[]
+  constructor(private MPVService: MPVService) {
+    this.getAllDataMPV();
+  }
 
-  constructor() {}
 
+  getAllDataMPV(){
+    this.MPVService.getAllDataMPV().subscribe(
+      (data:any)=> { this.documentos = data.data;
+        for(let i = 0; i<this.documentos.length;i++){
+          if(this.documentos[i]['documentos'].length){
+            this.documentos[i]['documentos'] =JSON.parse(this.documentos[i]['documentos']);
+          }
+          
+        }
+        //console.log(this.documentos);
+      },
+      (err: any) => {}
+    );
+  }
+
+  sendMailCustom(){
+    (req: Request) => {
+      this.MPVService.sendMailCustom(req);
+    }
+  }
+
+  enviarCorreo(){
+    (req: Request, expe_id: any, content: any, mode: any) => {
+      this.MPVService.enviarCorreo(req, expe_id, content, mode);
+    }
+  }
+  
+  
   ngOnInit(): void {
     this.cols = [
-      { field: 'category', header: 'Tipo Doc.' },
-      { field: 'quantity', header: 'Nro' },
-      { field: 'name', header: 'Asunto' },
-      { field: 'image', header: 'PDF' },
-      { field: 'name', header: 'Solicitante' },
-      { field: 'quantity', header: 'RUC/DNI' },
-      { field: 'quantity', header: 'Sisgedo' },
-      { field: 'quantity', header: 'Fecha' },
-      { field: 'quantity', header: 'Hora' },
-      { field: 'description', header: 'Accion' },
+      { type:'text', field: 'tipo_doc', header: 'Tipo Doc.' },
+      { type:'text', field: 'ndocumento', header: 'Nro' },
+      { type:'text', field: 'asunto', header: 'Asunto' },
+      { type:'json', field: 'documentos', header: 'PDF' },
+      { type:'text', field: 'nombres', header: 'Solicitante' },
+      { type:'text', field: 'ndoc', header: 'RUC/DNI' },
+      { type:'text', field: 'expe_id', header: 'Sisgedo' },
+      { type:'text', field: 'created_at', header: 'Fecha' },
+      { type:'text', field: 'quantity', header: 'Hora' },
+      { type:'text', field: '', header: 'Accion' },
     ];
 
     this.exportColumns = this.cols.map((col: any) => ({
@@ -168,38 +206,14 @@ export class ServerPageComponent implements OnInit {
       dataKey: col.field,
     }));
 
-    //this.CustomerService.getCustomersLarge().then(customers => this.customers = customers);
-
-    //console.log(this.products)
   }
-
-  /*
-  next() {
-    this.first = this.first + this.rows;
-  }
-
-  prev() {
-      this.first = this.first - this.rows;
-  }
-
-  reset() {
-      this.first = 0;
-  }
-
-  isLastPage(): boolean {
-      return this.customers ? this.first === (this.customers.length - this.rows): true;
-  }
-
-  isFirstPage(): boolean {
-      return this.customers ? this.first === 0 : true;
-  }*/
 
   exportPdf() {
     import('jspdf').then((jsPDF) => {
       import('jspdf-autotable').then((x) => {
         const doc = new jsPDF.default('p', 'cm');
-        (doc as any).autoTable(this.exportColumns, this.products);
-        doc.save('products.pdf');
+        (doc as any).autoTable(this.exportColumns, this.getAllDataMPV());
+        doc.save('mpvPdf');
       });
     });
   }
@@ -233,7 +247,7 @@ export class ServerPageComponent implements OnInit {
   }
 
   customSort(event: SortEvent) {
-    console.log(event)
+    console.log(event);
     event.data?.sort((data1, data2) => {
       let value1 = data1.event.field;
       let value2 = data2.event.field;

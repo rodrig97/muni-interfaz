@@ -28,15 +28,17 @@ export class Swal2Service {
   }
 
   objectToFormData(obj:any) {
+    
     const formData = new FormData();
-
+   
     // prevent to send empty fields
-    Object.keys(obj).forEach((key) => {
-      if (obj[key] !== "") {
-        formData.append(key, obj[key]);
-      }
-    });
+    const selectedFiles = obj.target.files;
+    const currentFileUpload = selectedFiles.item(0);
 
+
+    console.log(currentFileUpload)
+    formData.append('file', currentFileUpload);
+    console.log(formData)
     return formData;
   }
 

@@ -2,6 +2,7 @@ import { FormGroup, Validators, FormControl } from "@angular/forms";
 
 export const formMesaTramite: any = new FormGroup({
    
+    /*
     expe_id: new FormControl('', Validators.required),
     expe_origen: new FormControl('', Validators.required),
     expe_tipo: new FormControl('', Validators.required),
@@ -32,12 +33,12 @@ export const formMesaTramite: any = new FormGroup({
     expe_numtdoc: new FormControl('', Validators.required),
     tupa_id: new FormControl('', Validators.required),
     doc_identidad: new FormControl('', Validators.required),
-    expe_hora_doc: new FormControl('', Validators.required),
+    expe_hora_doc: new FormControl('', Validators.required),*/
 
     nroDNI: new FormControl('', Validators.required),
     nroVerifDNI: new FormControl('', Validators.required),
 
-    nombres: new FormControl('', Validators.required),
+    nombres: new FormControl(''),
     email: new FormControl('', [Validators.required,Validators.email]),
     phone: new FormControl('', Validators.required),
 

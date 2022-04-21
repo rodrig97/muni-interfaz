@@ -1,3 +1,4 @@
+<link rel="icon" type="image/x-icon" href="../../../../muni.ico">
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
@@ -92,6 +93,7 @@
                       >&nbsp;<i
                         aria-hidden="true"
                         class="fas fa-question-circle"
+                        (click)="openDialog()"
                       ></i
                     ></span>
                     <div class="input-group">
@@ -216,10 +218,10 @@
                       formControlName="tipo_documento"
                      
                     >
-                      <!---->
-                      <option value="0: 1">OFICIO</option>
-                      <option value="1: 5">CARTA</option>
-                      <option value="2: 6">SOLICITUD-OTROS</option>
+                      <!--ESTO HAY Q EVALUAR Y DEFINIR o hacer una tabla llamado tipo documento-->
+                      <option value="1">OFICIO</option>
+                      <option value="2">CARTA</option>
+                      <option value="3">SOLICITUD-OTROS</option>
                     </select>
                   </div>
                 </div>
@@ -306,8 +308,40 @@
                   3. ADJUNTAR DOCUMENTO
                 </div>
               </div>
+              <!---->
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <table class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Subir documento en pdf</th>
+                        <th>Cargado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input
+                            type="file"
+                            class="form-control-file w-100"
+                            (change)="enviarArchivos($event)"
+                            accept="application/pdf"
+                          />
+                        </td>
+                        <td>
+                          <mat-chip-list>
+                            <mat-chip [color]="cDocumento ? 'primary' : 'warn'" selected>
+                              {{ cDocumento ? "Si" : "No" }}
+                            </mat-chip>
+                          </mat-chip-list>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
               <div class="row">
-                <div class="form-group col-lg-6">
+                <div class="form-group col-lg-12">
                   <div class="row">
                     <div>Adjuntar documento principal</div>
                     <div class="form-group col-lg-12">
@@ -316,8 +350,10 @@
                       <input
                         type="file"
                         class="custom-file-input"
-                        id="validatedCustomFile"
+                        
                         required
+                        (change)="enviarArchivos($event)"
+                        accept="application/pdf"
                       />
                       <label class="custom-file-label" for="validatedCustomFile"
                         >Seleccione un archivo</label
@@ -345,7 +381,7 @@
                         class="btn btn-success"
                         ngbautofocus=""
                         type="button"
-                        disabled=""
+                        disabled="!custom-file-input.valid"
                       >
                         Agregar Anexo
                       </button>
@@ -353,7 +389,7 @@
                   </div>
                 </div>
 
-                <div class="form-group col-lg-6">
+              <!--  <div class="form-group col-lg-6">
                   <div
                     class="row tabledocs-title"
                     style="
@@ -365,10 +401,9 @@
                     <div class="col col-md-6">Nombre Archivo</div>
                     <div class="col col-md-2">Tipo</div>
                     <div class="col col-md-3">Tamaño</div>
-                    <div class="col col-md-1"></div>
                   </div>
                   <div class="row" style="font-size: 0.8rem">
-                    <!---->
+                    
                     <div
                       class="col"
                       style="
@@ -380,7 +415,7 @@
                       No agrego documento Principal
                     </div>
                   </div>
-                  <!----><br />
+                  
                   <div
                     class="row tabledocs-title"
                     style="
@@ -392,10 +427,9 @@
                     <div class="col col-md-6">Nombre Archivo</div>
                     <div class="col col-md-2">Tipo</div>
                     <div class="col col-md-3">Tamaño</div>
-                    <div class="col col-md-1"></div>
                   </div>
                   <div class="row" style="font-size: 0.8rem">
-                    <!---->
+                   
                     <div
                       class="col"
                       style="
@@ -407,33 +441,28 @@
                       Sin Anexos
                     </div>
                   </div>
-                  <!---->
-                </div>
+                  
+                </div>-->
               </div>
+              <!---->
               <hr />
               <div class="advertencia" align="left">
                 *Para el documento principal y anexos el formato debe ser PDF.*
                 Tamaño maximo de los archivos debe ser menor o igual a 10MB.
               </div>
               <div align="right">
-                <button
-                 [disabled]="!formMesaTramite.valid"
-                  (click)="EnviarDocumento()"
-                  class="btn btn-success"
-                  ngbautofocus=""
-                  type="button">
-                <script>
-                    var a = [formGroup];
-                    function cond(){
-                        if (a!=null){
-                            <a href="./server-page/admin-page.component.html">
-
-                            </a>
-                        }
-                    }
-                </script>
-                  <i aria-hidden="true" class="fas fa-address-book"></i> Enviar
-                </button>
+                <a >
+                    <button
+                        [disabled]="!formMesaTramite.valid"
+                        
+                        (click)="EnviarDocumento()"
+                        class="btn btn-success"
+                        ngbautofocus=""
+                        type="submit">
+                        <i aria-hidden="true" class="fas fa-address-book"></i>
+                        Enviar
+                    </button>
+                </a>
               </div>
             </form>
           </div>
