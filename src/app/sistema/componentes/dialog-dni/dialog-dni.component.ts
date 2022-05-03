@@ -14,7 +14,8 @@ export class DialogDniComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<DialogDniComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {}
   onNoClick(): void {

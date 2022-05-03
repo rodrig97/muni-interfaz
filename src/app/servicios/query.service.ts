@@ -11,7 +11,6 @@ export class QueryService {
   constructor(private http: HttpClient) {}
 
   subirArchivo(data: any) {
-      console.log(data)
     return this.http.post(`${this.backendApi}/grl/general/subir-archivo`, data);
   }
 }

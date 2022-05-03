@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import * as FileSaver from 'file-saver';
 import * as jsPDF from 'jspdf';
 import * as autoTable from 'jspdf-autotable';
-//import { CustomerService } from '../../formularios/customerservice';
-//import { Customer } from '../../formularios/customer';
-//import { ProductSmall } from '../../../assets/products-small';
 //import * as data from '../../assets/products-SVGAnimatedLengthList.json';
 import { SortEvent } from 'primeng/api';
 //import { DocumentosService } from 'src/app/servicios/documentos.service';
 import { MPVService } from 'src/app/servicios/mpv.service';
 import { environment } from 'src/environments/environment';
-//MPVService
+import { DialogEmailComponent } from '../../componentesEmail/dialog-email/dialog-email.component';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  
+} from '@angular/material/dialog';
+import { DialogInfoComponent } from '../../componentesInfo/dialog-info/dialog-info.component';
+import { DialogSisgComponent } from '../../componentesSisgedo/dialog-sisg/dialog-sisg.component';
 
 
 @Component({
@@ -19,154 +24,31 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./server-page.component.scss'],
 })
 export class ServerPageComponent implements OnInit {
+  
   backendpdfs = environment.backendpdfs;
   first = 0;
   rows = 10;
 
-  products: any = [
-    {
-      id: '1000',
-      code: 'f230fh0g3',
-      name: 'Bamboo Watch',
-      description: 'Product Description',
-      document: 'bamboo-watch.pdf',
-      price: 65,
-      category: 'Accessories',
-      quantity: 24,
-      inventoryStatus: 'INSTOCK',
-      rating: 5,
-    },
-    {
-      id: '1001',
-      code: 'nvklal433',
-      name: 'Black Watch',
-      description: 'Product Description',
-      document: 'black-watch.pdf',
-      price: 72,
-      category: 'Accessories',
-      quantity: 61,
-      inventoryStatus: 'INSTOCK',
-      rating: 4,
-    },
-    {
-      id: '1002',
-      code: 'zz21cz3c1',
-      name: 'Blue Band',
-      description: 'Product Description',
-      document: 'blue-band.pdf',
-      price: 79,
-      category: 'Fitness',
-      quantity: 2,
-      inventoryStatus: 'LOWSTOCK',
-      rating: 3,
-    },
-    {
-      id: '1003',
-      code: '244wgerg2',
-      name: 'Blue T-Shirt',
-      description: 'Product Description',
-      document: 'blue-t-shirt.pdf',
-      price: 29,
-      category: 'Clothing',
-      quantity: 25,
-      inventoryStatus: 'INSTOCK',
-      rating: 5,
-    },
-    {
-      id: '1004',
-      code: 'h456wer53',
-      name: 'Bracelet',
-      description: 'Product Description',
-      document: 'bracelet.pdf',
-      price: 15,
-      category: 'Accessories',
-      quantity: 73,
-      inventoryStatus: 'INSTOCK',
-      rating: 4,
-    },
-    {
-      id: '1005',
-      code: 'av2231fwg',
-      name: 'Brown Purse',
-      description: 'Product Description',
-      document: 'brown-purse.pdf',
-      price: 120,
-      category: 'Accessories',
-      quantity: 0,
-      inventoryStatus: 'OUTOFSTOCK',
-      rating: 4,
-    },
-    {
-      id: '1006',
-      code: 'bib36pfvm',
-      name: 'Chakra Bracelet',
-      description: 'Product Description',
-      document: 'chakra-bracelet.pdf',
-      price: 32,
-      category: 'Accessories',
-      quantity: 5,
-      inventoryStatus: 'LOWSTOCK',
-      rating: 3,
-    },
-    {
-      id: '1007',
-      code: 'mbvjkgip5',
-      name: 'Galaxy Earrings',
-      description: 'Product Description',
-      document: 'galaxy-earrings.pdf',
-      price: 34,
-      category: 'Accessories',
-      quantity: 23,
-      inventoryStatus: 'INSTOCK',
-      rating: 5,
-    },
-    {
-      id: '1008',
-      code: 'vbb124btr',
-      name: 'Game Controller',
-      description: 'Product Description',
-      document: 'game-controller.pdf',
-      price: 99,
-      category: 'Electronics',
-      quantity: 2,
-      inventoryStatus: 'LOWSTOCK',
-      rating: 4,
-    },
-    {
-      id: '1009',
-      code: 'cm230f032',
-      name: 'Gaming Set',
-      description: 'Product Description',
-      document: 'gaming-set.pdf',
-      price: 299,
-      category: 'Electronics',
-      quantity: 63,
-      inventoryStatus: 'INSTOCK',
-      rating: 3,
-    },
-  ];
-
-  //customers: Customer[] = [];
-
-  selectedProducts: any = [];
-
   cols: any = [];
-
   exportColumns: any = [];
-  documentos:any=[]
-  constructor(private MPVService: MPVService) {
+  documentos: any = [];
+
+
+  constructor(private MPVService: MPVService, private dialog: MatDialog, private DialogInfoComponent:DialogInfoComponent) {
+    
     this.getAllDataMPV();
   }
 
-
-  getAllDataMPV(){
+  getAllDataMPV() {
     this.MPVService.getAllDataMPV().subscribe(
-      (data:any)=> { this.documentos = data.data;
-        for(let i = 0; i<this.documentos.length;i++){
-          if(this.documentos[i]['documentos'].length){
-            this.documentos[i]['documentos'] =JSON.parse(this.documentos[i]['documentos']);
+      (data: any) => {
+        this.documentos = data.data;
+        for (let i = 0; i < this.documentos.length; i++) {
+          if (this.documentos[i]['documentos'].length) {
+            typeof this.documentos[i]['documentos'] === 'string' ?  this.documentos[i]['documentos'] = JSON.parse(
+              this.documentos[i]['documentos']
+            ) : '';
           }
-          
         }
         //console.log(this.documentos);
       },
@@ -174,45 +56,66 @@ export class ServerPageComponent implements OnInit {
     );
   }
 
-  sendMailCustom(){
+  /*sendMailCustom() {
     (req: Request) => {
       this.MPVService.sendMailCustom(req);
-    }
-  }
+    };
+  }*/
 
-  enviarCorreo(){
-    (req: Request, expe_id: any, content: any, mode: any) => {
-      this.MPVService.enviarCorreo(req, expe_id, content, mode);
-    }
-  }
-  
-  
+
   ngOnInit(): void {
+
     this.cols = [
-      { type:'text', field: 'tipo_doc', header: 'Tipo Doc.' },
-      { type:'text', field: 'ndocumento', header: 'Nro' },
-      { type:'text', field: 'asunto', header: 'Asunto' },
-      { type:'json', field: 'documentos', header: 'PDF' },
-      { type:'text', field: 'nombres', header: 'Solicitante' },
-      { type:'text', field: 'ndoc', header: 'RUC/DNI' },
-      { type:'text', field: 'expe_id', header: 'Sisgedo' },
-      { type:'text', field: 'created_at', header: 'Fecha' },
-      { type:'text', field: 'quantity', header: 'Hora' },
-      { type:'text', field: '', header: 'Accion' },
+      { width:2, type: 'text', field: 'tipo_documento', header: 'Tipo Doc.' },
+      { width:2, type: 'text', field: 'ndocumento', header: 'Nro' },
+      { width:7, type: 'text', field: 'asunto', header: 'Asunto' },
+      { width:3, type: 'json', field: 'documentos', header: 'PDF' },
+      { width:2, type: 'text', field: 'nombres', header: 'Solicitante' },
+      { width:2, type: 'text', field: 'ndoc', header: 'RUC/DNI' },
+      { width:2, type: 'text', field: 'expe_id', header: 'Sisgedo' },
+      { width:2, type: 'date', field: 'created_at', header: 'Fecha' },
+      { width:2, type: 'time', field: 'created_at', header: 'Hora' },
+      { width:2, type: 'accion', field: 'expe_id', header: 'Accion' },
     ];
 
     this.exportColumns = this.cols.map((col: any) => ({
+      width:col.width,
+      type:col.type,
       title: col.header,
       dataKey: col.field,
     }));
-
   }
 
   exportPdf() {
+    console.log(this.exportColumns)
+    let title = 'Reporte de Mesa de Partes';
+    
+    import('jspdf').then((jsPDF) => {
+      import('jspdf-autotable').then((x) => {
+
+        const doc = new jsPDF.default('l', 'cm');
+        this.exportColumns = this.exportColumns.filter((i:any)=>i.type!=='json' && i.title!=='Accion' && i.type!=='date' && i.type!=='time')
+        let column='';
+        document.write(title);
+        for(let i=0; i<this.exportColumns.length;i++){
+              column+=i+':{columnWidth:'+Number(this.exportColumns[i]['width'])+'},';
+        }
+        (doc as any).autoTable(this.exportColumns, this.documentos, {
+          styles:{fontSize:9},
+          columnStyles: { 
+            column
+          },
+        });
+        doc.save('mpvPdf');
+      });
+    });
+  }
+
+  exportPdfSpecific(fila: any) {
     import('jspdf').then((jsPDF) => {
       import('jspdf-autotable').then((x) => {
         const doc = new jsPDF.default('p', 'cm');
-        (doc as any).autoTable(this.exportColumns, this.getAllDataMPV());
+        (doc as any).autoTable(this.exportColumns, fila);
         doc.save('mpvPdf');
       });
     });
@@ -220,13 +123,13 @@ export class ServerPageComponent implements OnInit {
 
   exportExcel() {
     import('xlsx').then((xlsx) => {
-      const worksheet = xlsx.utils.json_to_sheet(this.products);
+      const worksheet = xlsx.utils.json_to_sheet(this.documentos);
       const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
       const excelBuffer: any = xlsx.write(workbook, {
         bookType: 'xlsx',
         type: 'array',
       });
-      this.saveAsExcelFile(excelBuffer, 'products');
+      this.saveAsExcelFile(excelBuffer, 'documentos');
     });
   }
 
@@ -248,7 +151,8 @@ export class ServerPageComponent implements OnInit {
 
   customSort(event: SortEvent) {
     console.log(event);
-    event.data?.sort((data1, data2) => {
+    //event.slice(data1, data2);
+    event.data?.sort((data1:any, data2:any) => {
       let value1 = data1.event.field;
       let value2 = data2.event.field;
       let result = null;
@@ -261,6 +165,44 @@ export class ServerPageComponent implements OnInit {
       else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
 
       return Number(event.order) * result;
+    });
+  }
+
+  openDialog(data:any) {
+    const dialogRef = this.dialog.open(DialogEmailComponent, {
+      width: '500px',
+      data:data
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  openDialog1(data:any) {
+    //console.log(data)
+    const dialogRef = this.dialog.open(DialogInfoComponent, {
+      width: '800px',
+      data:data
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  /*openDialog2(data:any) {
+    //console.log(data)
+    const dialogRef = this.dialog.open(DialogPdfsComponent, {
+      width: '800px',
+      data:data
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }*/
+
+  openDialog2(data:any){
+    const dialogRef = this.dialog.open(DialogSisgComponent,{
+      width: '800px',
+      data:data
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getAllDataMPV();
     });
   }
 }

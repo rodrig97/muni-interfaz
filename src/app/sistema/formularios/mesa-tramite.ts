@@ -47,8 +47,9 @@ export const formMesaTramite: any = new FormGroup({
     folio: new FormControl('', Validators.required),
     asunto: new FormControl('', Validators.required),
     
-    //adjuntar_doc_princ: new FormControl('', Validators.required),
-    //anexos: new FormControl('', Validators.required),
+    adjuntar_doc_princ: new FormControl(''),
+    nombreArchivo: new FormControl(''),
+    anexos: new FormControl(''),
     
    
 });

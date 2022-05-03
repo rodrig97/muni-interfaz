@@ -19,7 +19,7 @@
         pButton
         pRipple
         icon="pi pi-file-excel"
-        (click)="dt.exportCSV()"
+        (click)="exportExcel()"
         class="p-button-success mr-2"
         pTooltip="XLS"
         tooltipPosition="bottom"
@@ -44,7 +44,8 @@
         pTooltip="PDF"
         tooltipPosition="bottom"
       ></button>
-      <button
+      <!--
+        <button
         type="button"
         pButton
         pRipple
@@ -54,6 +55,8 @@
         pTooltip="Selection Only"
         tooltipPosition="bottom"
       ></button>
+      -->
+      
     </div>
   </mat-card>
 
@@ -64,7 +67,6 @@
     (sortFunction)="customSort($event)"
     [customSort]="true"
     selectionMode="multiple"
-    [(selection)]="selectedProducts"
     responsiveLayout="scroll"
     [exportHeader]="'customExportHeader'"
     [paginator]="true"
@@ -91,97 +93,90 @@
     <br /><br />
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <th pSortableColumn="{{ col.header }}" *ngFor="let col of columns">
-          {{ col.header }} <p-sortIcon field="code"></p-sortIcon>
+        <!--pSortableColumn="{{ col.header }}"-->
+        <!-- <p-sortIcon field="code" ></p-sortIcon>-->
+        <th  *ngFor="let col of columns">
+          {{ col.header }}
         </th>
       </tr>
     </ng-template>
+    
     <ng-template pTemplate="body" let-rowData let-columns="columns">
       <tr [pSelectableRow]="rowData">
         <td *ngFor="let col of columns">
+         
           <div *ngIf="col.type == 'json'">
-            <div *ngIf="rowData[col.field].length == null">
+            
+           <div *ngIf="rowData[col.field].length == null">
               <a [matTooltip]="rowData[col.field]['name_primary']" target="_blank" [href]="backendpdfs+'/'+rowData[col.field]['path_primary']">
                 <mat-icon color="primary">remove_red_eye</mat-icon>
               </a>
             </div>
+            <div *ngIf="rowData[col.field].length>0">
+              <div *ngFor="let j of rowData[col.field]">
+                <a [matTooltip]="j['name_primary']" target="_blank" [href]="backendpdfs+'/'+j['path_primary']">
+                  <mat-icon color="primary">remove_red_eye</mat-icon>
+                </a>
+              </div>
+              
+            </div>
           </div>
-          <div *ngIf="col.type == 'text'">
+          <!--<div *ngIf="col.type == 'text'>-->
+            <!--
+              <div *ngIf="col.field == 'tipo_doc' && rowData[col.field] == 1">
+                PERSONA NATURAL
+              </div >
+            -->
+          <div *ngIf="col.field == 'ndocumento' || col.field == 'asunto' || col.field == 'nombres' || col.field == 'ndoc' || col.header == 'Sisgedo'">
             {{ rowData[col.field] }}
           </div>
+
+          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '1'">
+            OFICIO
+          </div >
+          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '5'">
+            CARTA
+          </div >
+          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '6'">
+            SOLICITUD-OTROS
+          </div >
+          
+          <div *ngIf="col.type == 'date'">
+            {{ rowData[col.field] | date: 'mediumDate'}}
+          </div>
+          <div *ngIf="col.type == 'time'">
+            {{ rowData[col.field] | date: 'shortTime'}}
+          </div>
+          <div class="btn-group" *ngIf="col.type == 'accion'">
+            <button
+              class="btn btn-sm btn-primary view_send_mail btn-circle"
+              (click)="openDialog(rowData)"><i class="far fa-envelope"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-info view_reclamo btn-circle"
+              (click)="openDialog1(rowData)"><i class="fas fa-info-circle"></i>
+            </button>
+            
+            <div *ngIf="rowData[col.field] == null">
+              <button class="btn btn-sm btn-danger receive btn-circle"
+              (click)="openDialog2(rowData)"><i class="fas fa-file-import"></i>
+              </button>
+            </div>
+            <!--
+              <div *ngIf=" rowData[col.field]!= null">
+              {{ rowData[col.field] }}
+            </div>
+            -->
+            
+          </div>
         </td>
-        <button
-          class="btn btn-sm btn-primary view_send_mail btn-circle"
-          (click)="enviarCorreo()"
-          (click)="sendMailCustom()"
-        >
-          <i class="far fa-envelope"></i>
-        </button>
+        
       </tr>
     </ng-template>
+    <!------------------------------------------------------------------------------------>
   </p-table>
 </mat-card>
 <footer class="footer" align="center">
   Copyright © Sub Gerencia de Informatica - MPI
 </footer>
 
-<!--
-<p-table [value]="products">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>TipoDoc</th>
-            <th>Nro</th>
-            <th>Asunto</th>
-            <th>PDF</th>
-            <th>Solicitante</th>
-            <th>RUC/DNI</th>
-            <th>Sisgedo</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Accion</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-products>
-        <tr>
-            <td>{{products.TipoDoc}}</td>
-            <td>{{products.Nro}}</td>
-            <td>{{products.Asunto}}</td>
-            <td>{{products.PDF}}</td>
-        </tr>
-    </ng-template>
-</p-table>
--->
-
-<!--
-    <p-table [value]="customers" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Tipo doc.</th>
-                <th>Nro</th>
-                <th>Asunto</th>
-                <th>PDF</th>
-                <th>Solicitante</th>
-                <th>RUC/DNI</th>
-                <th>Sisgedo</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Accion</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-customer>
-            <tr>
-                <td>{{customer.name}}</td>
-                <td>{{customer.country.name}}</td>
-                <td>{{customer.company}}</td>
-                <td>{{customer.representative.name}}</td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="paginatorleft">
-            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-        </ng-template>
-        <ng-template pTemplate="paginatorright">
-            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-        </ng-template>
-    </p-table>
--->

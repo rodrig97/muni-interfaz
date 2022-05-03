@@ -12,19 +12,29 @@ import { MesaTramiteComponent } from './sistema/pages/mesa-tramite/mesa-tramite.
 import { AreaService } from './servicios/areas.service';
 import { FilesService } from './servicios/files.service';
 import { ServerPageComponent } from './sistema/pages/server-page/server-page.component';
-import {TableModule} from 'primeng/table';
-import { ButtonModule } from "primeng/button";
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 //import { CustomerService } from './sistema/formularios/customerservice';
-import {InputTextModule} from 'primeng/inputtext';
+import { InputTextModule } from 'primeng/inputtext';
 import { DialogDniComponent } from './sistema/componentes/dialog-dni/dialog-dni.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogEmailComponent } from './sistema/componentesEmail/dialog-email/dialog-email.component';
+import { DialogInfoComponent } from './sistema/componentesInfo/dialog-info/dialog-info.component';
+import { InterceptorService } from './loader/interceptor.service';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { DialogSisgComponent } from './sistema/componentesSisgedo/dialog-sisg/dialog-sisg.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MesaTramiteComponent,
     ServerPageComponent,
-    DialogDniComponent
+    DialogDniComponent,
+    DialogEmailComponent,
+    DialogInfoComponent,
+    DialogSisgComponent
   ],
   imports: [
     BrowserModule,
@@ -36,9 +46,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     TableModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    PdfViewerModule 
   ],
-  providers: [AreaService],
-  bootstrap: [AppComponent]
+  providers: [
+    
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -25,8 +25,16 @@ export class MPVService {
     public sendMailCustom(req: Request){
         return this.http.post(`${this.backendApi}/mpvirtual/sendmailcustom`, req);
     }
-
+    public createExpedienteSisgedo(data:any){
+        return this.http.post(`${this.backendApi}/mpvirtual/createExpedienteSisgedo/`, data);
+    }
+/*
     public enviarCorreo(req: Request, expe_id: any, content: any, mode: any){
         return this.http.post(`${this.backendApi}/reclamos/presentar`, req);
-    }
+    }*/
+
+/*    public presentarTramite(req: Request){
+        return this.http.post(`${this.backendApi}/mpvirtual/presentar`, req);
+    }*/
+
 }

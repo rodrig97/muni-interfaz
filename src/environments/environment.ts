@@ -7,6 +7,9 @@ export const environment = {
   backend: 'http://127.0.0.1:8000',
   backendApi: 'http://127.0.0.1:8000/api',
   backendpdfs: 'http://127.0.0.1:8000/pdfs',
+  Urltoken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impob2FuZDYwQGdtYWlsLmNvbSJ9.dFcJv4RKUFuycPMjvgRAnLLrE4yVmqZLDECyZ05aaOs',
+  Urldni: 'https://dniruc.apisperu.com/api/v1/dni/',
+  Urlruc: 'https://dniruc.apisperu.com/api/v1/ruc/'
   
 };
 

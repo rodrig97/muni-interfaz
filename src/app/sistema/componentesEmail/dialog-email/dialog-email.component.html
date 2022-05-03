@@ -1,0 +1,56 @@
+<!--
+    <h1 mat-dialog-title>NOTIFICAR OBSERVACION AL CORREO ELECTRONICO</h1>
+<div mat-dialog-content>
+  <p>Para:</p>
+  <mat-form-field class="formula" appearance="fill">
+    <mat-label>Asunto</mat-label>
+    <input matInput [(ngModel)]="data.motivo">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+</div>
+-->
+<div class="modal-header" style="background: rgb(232, 231, 231)">
+    <h6 class="modal-title" id="modal-basic-title">NOTIFICAR OBSERVACION AL CORREO ELECTRONICO</h6>
+    
+</div>
+
+<form [formGroup]="formMesaTramite" class="user ng-pristine ng-invalid ng-touched" novalidate="">
+    <div class="row">
+        <div class="form-group col-lg-12">
+            <label for="email">Para: </label>
+            <span>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i aria-hidden="true" class="fas fa-at"></i>
+                        </span>
+                    </div>
+                    <input class="form-control ng-pristine ng-invalid ng-touched" [value]="data.email" name="email" type="email" readonly="">
+                </div>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-lg-12"><label for="motivo">Motivo:</label>
+            <span class="required">*
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i aria-hidden="true" class="far fa-sticky-note"></i>
+                        </span>
+                    </div>
+                    <textarea class="form-control ng-untouched ng-pristine ng-invalid" formControlName="motivo" id="motivo" rows="4">
+                        
+                    </textarea>
+                    <!---->
+                </div>
+            </span>
+        </div>
+    </div>
+</form>
+<div class="modal-footer">
+    <span style="text-align: left"><small style="text-align: left" class="small">* Al enviar esta notificacion se anulara el tramite</small>
+    </span>
+    <button class="btn btn-success" ngbautofocus="" type="button" (click)="sendMailCustom()">Enviar
+    </button>
+    <!--(click)="sendMailCustom()"-->
+</div>

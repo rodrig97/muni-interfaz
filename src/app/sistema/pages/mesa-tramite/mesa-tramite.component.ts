@@ -22,6 +22,8 @@ import { QueryService } from 'src/app/servicios/query.service';
   styleUrls: ['./mesa-tramite.component.scss'],
 })
 export class MesaTramiteComponent implements OnInit {
+  control1 = new FormControl();
+  control2 = new FormControl();
   formMesaTramite: FormGroup = formMesaTramite;
   submitted: boolean = false;
   //$request: Request;
@@ -57,7 +59,52 @@ export class MesaTramiteComponent implements OnInit {
       this.formMesaTramite.value.nroVerifDNI != '' &&
       this.formMesaTramite.value.nroVerifDNI.length == 1
     ) {
-      this.PideService.searchDni(
+      this.PideService.searchDniExterno(
+        this.formMesaTramite.value.nroDNI,
+        this.formMesaTramite.value.nroVerifDNI
+      ).subscribe(
+        (resp: any) => {
+          if(Number(resp.codVerifica) ==  Number(this.formMesaTramite.value.nroVerifDNI)){
+            this.formMesaTramite.controls['nombres'].setValue(
+              resp.nombres + ' ' + resp.apellidoPaterno + ' ' + resp.apellidoMaterno
+            );
+          }
+          else {
+            this.Swal2Service.alertaToast('ATENCIÓN', 'Código verificador erróneo', 'warning');
+            this.formMesaTramite.controls['nombres'].setValue(null);
+          }
+          //console.log(resp)
+          
+          /*let data = JSON.parse(resp.data);
+          console.log(data);
+          if (resp.validated) {
+            this.formMesaTramite.controls['nombres'].setValue(
+              data.prenombres + ' ' + data.apPrimer + ' ' + data.apSegundo
+            );
+          } else {
+            this.Swal2Service.alertaToast('ATENCIÓN', resp.mensaje, 'warning');
+            this.formMesaTramite.controls['nombres'].setValue(null);
+          } */
+        },
+        (error: any) => {
+          //console.log(error)
+         
+        }
+      );
+    } else {
+      this.formMesaTramite.controls['nombres'].setValue(null);
+    }
+  }
+  /*
+  searchDniExterno() {
+    if (
+      this.formMesaTramite.value.nroDNI.length >= 8 &&
+      this.formMesaTramite.value.nroVerifDNI != '' &&
+      this.formMesaTramite.value.nroVerifDNI.length == 1
+    ) {
+      let code = this.getCode();
+      console.log(code)
+      /*this.PideService.searchDniExterno(
         this.formMesaTramite.value.nroDNI,
         this.formMesaTramite.value.nroVerifDNI
       ).subscribe(
@@ -73,12 +120,35 @@ export class MesaTramiteComponent implements OnInit {
             this.formMesaTramite.controls['nombres'].setValue(null);
           }
         },
-        (error: any) => {}
+        (error: any) => {
+          this.searchDniExterno();
+        }
       );
     } else {
       this.formMesaTramite.controls['nombres'].setValue(null);
     }
   }
+  getCode(){
+    if (this.formMesaTramite.value.nroDNI != "" || this.formMesaTramite.value.nroDNI.length == 8) {
+			let suma = 0;
+			let hash = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+			suma = 5;
+			for (let i = 2; i < 10; i++) {
+				suma += (this.formMesaTramite.value.nroDNI[i-2] * hash[i]);
+			}
+			let entero = parseInt(suma / 11);
+
+			$digito = 11 - (suma - $entero * 11);
+
+			if ($digito == 10) {
+				$digito = 0;
+			} else if ($digito == 11) {
+				$digito = 1;
+			}
+			return $digito;
+		}
+		return "";
+  }*/
   /*
   saveTramiteSGD() {
     (req: Request) => {
@@ -88,15 +158,23 @@ export class MesaTramiteComponent implements OnInit {
 */
   EnviarDocumento() {
     this.submitted = true;
-    console.log(this.formMesaTramite);
+    this.adjuntar_doc_princ.length > 0
+      ? (this.adjuntar_doc_princ['anexos'] = this.anexos)
+      : '';
+    this.formMesaTramite.controls['adjuntar_doc_princ'].setValue(
+      this.adjuntar_doc_princ
+    );
+
+    this.formMesaTramite.controls['anexos'].setValue(this.anexos);
+    //console.log(this.formMesaTramite);
     if (this.formMesaTramite.valid) {
       this.MPVService.saveTramiteSGD(this.formMesaTramite.value).subscribe(
         (resp: any) => {
-          //console.log(resp);
+          console.log(resp);
           if (resp.validated) {
+            //console.log(1);
             this.router.navigate(['./admin-page']);
           }
-          //this.router.navigate(['./admin-page']); [routerLink]="'/admin-page'"
         },
         (error: any) => {
           console.log(error);
@@ -119,31 +197,61 @@ export class MesaTramiteComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {});
   }
-
   filesToUpload: any;
   cDocumento: any;
-  enviarArchivos(fileInput: any) {
+  adjuntar_doc_princ: any = [];
+  anexos: any = [];
+
+  enviarArchivos(fileInput: any, tipo: any) {
     //console.log(this.data)
-    const formData = new FormData();
+    let archivoFile = null;
+    this.filesToUpload = <Array<File>>fileInput.target.files;
 
-    // prevent to send empty fields
-    const selectedFiles = fileInput.target.files;
-    const currentFileUpload = selectedFiles.item(0);
+    if (this.filesToUpload.length) {
+      archivoFile = this.filesToUpload[0];
+      const nombreArchivo = this.filesToUpload[0].name;
 
-    
-    formData.append('file', currentFileUpload);
-    console.log(formData);
-    this.QueryService.subirArchivo(formData).subscribe(
-      (resp:any) => {
-        //console.log(resp)
-        this.cDocumento = null;
-        if (resp) {
-          this.cDocumento = resp;
-         
-        }
-      },
-      (error) => {}
-    );
+      const dataFile = this.Swal2Service.objectToFormData({
+        file: archivoFile,
+      });
+      this.QueryService.subirArchivo(dataFile).subscribe(
+        (resp: any) => {
+          this.cDocumento = null;
+          if (resp) {
+            this.cDocumento = resp;
+            switch (Number(tipo)) {
+              case 1:
+                this.adjuntar_doc_princ.push({
+                  path_primary: this.cDocumento,
+                  name_primary: nombreArchivo,
+                });
+
+                break;
+              case 2:
+                this.anexos.push({
+                  path_primary: this.cDocumento,
+                  name_primary: nombreArchivo,
+                });
+                break;
+              default:
+                break;
+            }
+          }
+        },
+        (error: any) => {}
+      );
+    }
   }
-  
+
+  deleteArchivoAdj(item: any) {
+    this.adjuntar_doc_princ.pop({
+      item,
+    });
+  }
+
+  deleteArchivoAn(item: any) {
+    this.anexos.pop({
+      item,
+    });
+  }
 }
