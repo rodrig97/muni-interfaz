@@ -1,0 +1,433 @@
+<link rel="icon" type="image/x-icon" href="../../../../muni.ico">
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3" align="center">
+          <img
+            class="mpilo_logo"
+            src="assets/img/mpilo_logo.png"
+            weight="93"
+            height="93"
+            alt="mpilo_logo"
+          />
+        </div>
+        <div class="col-md-9" class="center-div">
+          <h2 class="titulo" style="text-align: center">
+            Mesa de partes Virtual
+          </h2>
+        </div>
+        <div class="col-md-12">
+          <div class="card-body">
+            <div class="row"></div>
+            <hr />
+            <form
+              [formGroup]="formMesaTramite"
+              class="user ng-invalid ng-touched ng-dirty"
+            >
+              <div class="row">
+                <div
+                  class="alert alert-primary font-weight-bold text-primary col-lg-12"
+                >
+                  1. IDENTIFICACIÓN DEL SOLICITANTE
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-lg-4">
+                  <label for="tipo_doc">Tipo de Persona</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i aria-hidden="true" class="fas fa-address-book"></i
+                      ></span>
+                    </div>
+                    <select
+                      class="form-control ng-pristine ng-valid ng-touched"
+                      formcontrolname="tipo_doc"
+                      name="tipo_doc"
+                    >
+                      <!--<i class="fa fa-address-card" aria-hidden="true"></i>-->
+                      <option value="0: Object">PERSONA NATURAL</option>
+                      <option value="1: Object">PERSONA JURIDICA</option>
+                    </select>
+                  </div>
+                </div>
+                <!---->
+                <div class="form-group col-lg-4">
+                  <div class="col-xs-2">
+                    <label for="ndoc">Número de DNI: </label
+                    ><span class="required">*</span>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"
+                          ><i
+                            aria-hidden="true"
+                            class="fas fa-sort-numeric-up"
+                          ></i
+                        ></span>
+                      </div>
+                      <input
+                        [ngClass]="{
+                          'form-control form-control': true,
+                          'is-invalid':
+                            submitted && formMesaTramite.get('nroDNI')?.invalid
+                        }"
+                        formControlName="nroDNI"
+                        (input)="searchDni()"
+                        maxlength="8"
+                        size="1"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <!---->
+                <div class="form-group col-lg-4">
+                  <div class="col-xs-2">
+                    <label
+                      for="ndoc"
+                      style="font-size: 11pt; margin-bottom: 0.6rem"
+                      >Número Verifica DNI: </label
+                    ><span class="required" style="cursor: pointer"
+                      >&nbsp;<i
+                        aria-hidden="true"
+                        class="fas fa-question-circle"
+                        (click)="openDialog()"
+                      ></i
+                    ></span>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"
+                          ><i
+                            aria-hidden="true"
+                            class="fas fa-sort-numeric-up"
+                          ></i
+                        ></span>
+                      </div>
+                      <input
+                        [ngClass]="{
+                          'form-control form-control': true,
+                          'is-invalid':
+                            submitted &&
+                            formMesaTramite.get('nroVerifDNI')?.invalid
+                        }"
+                        formControlName="nroVerifDNI"
+                        (input)="searchDni()"
+                        maxlength="1"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <!---->
+                <!---->
+              </div>
+              <!---->
+              <div class="row">
+                <div class="form-group col-lg-12">
+                  <label for="ape_nom">Nombre de Solicitante: </label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i aria-hidden="true" class="fa fa-users"></i
+                      ></span>
+                    </div>
+                    <input
+                      formControlName="nombres"
+                      class="form-control ng-pristine ng-invalid ng-touched"
+                      readonly=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-lg-4">
+                  <label for="phone">Celular:</label
+                  ><span class="required">*</span>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i aria-hidden="true" class="fas fa-mobile-alt"></i
+                      ></span>
+                    </div>
+                    <input
+                      appnumberonly=""
+                      [ngClass]="{
+                        'form-control form-control': true,
+                        'is-invalid':
+                          submitted && formMesaTramite.get('phone')?.invalid
+                      }"
+                      formControlName="phone"
+                      maxlength="15"
+                      placeholder="Ingrese un numero celular"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group col-lg-8">
+                  <label for="email">Email: </label
+                  ><span class="required">*</span>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i aria-hidden="true" class="fas fa-at"></i
+                      ></span>
+                    </div>
+                    <input
+                      class="form-control ng-pristine ng-invalid ng-touched"
+                      [ngClass]="{
+                        'form-control form-control': true,
+                        'is-invalid':
+                          submitted && formMesaTramite.get('email')?.invalid
+                      }"
+                      formControlName="email"
+                      maxlength="40"
+                      placeholder="Ingrese un correo electronico"
+                      type="email"
+                      required
+                    />
+                    <!---->
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  class="alert alert-primary font-weight-bold text-primary col-lg-12"
+                >
+                  2. DATOS DEL DOCUMENTO
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-lg-4">
+                  <label for="tipo_documento">Tipo de documento</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i aria-hidden="true" class="far fa-sticky-note"></i
+                      ></span>
+                    </div>
+                    <select
+                      class="form-control ng-pristine ng-valid ng-touched"
+                      [ngClass]="{
+                        'form-control form-control': true,
+                        'is-invalid':
+                          submitted &&
+                          formMesaTramite.get('tipo_documento')?.invalid
+                      }"
+                      formControlName="tipo_documento"
+                     
+                    >
+                      <!--ESTO HAY Q EVALUAR Y DEFINIR o hacer una tabla llamado tipo documento-->
+                      <option value="1">OFICIO</option>
+                      <option value="5">CARTA</option>
+                      <option value="6">SOLICITUD-OTROS</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-lg-4">
+                  <label for="ndocumento">Nro de documento </label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i
+                          aria-hidden="true"
+                          class="fas fa-sort-numeric-up"
+                        ></i
+                      ></span>
+                    </div>
+                    <input
+                      appnumberonly=""
+                      class="form-control ng-untouched ng-pristine ng-invalid"
+                      [ngClass]="{
+                        'form-control form-control': true,
+                        'is-invalid':
+                          submitted && formMesaTramite.get('ndocumento')?.invalid
+                      }"
+                      formControlName="ndocumento"
+                      maxlength="15"
+                      
+                    />
+                  </div>
+                </div>
+                <div class="form-group col-lg-4">
+                  <label for="folio">Nro total de Folios</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i
+                          aria-hidden="true"
+                          class="fas fa-sort-numeric-up"
+                        ></i
+                      ></span>
+                    </div>
+                    <input
+                      appnumberonly=""
+                      class="form-control ng-untouched ng-pristine ng-invalid"
+                      [ngClass]="{
+                        'form-control form-control': true,
+                        'is-invalid':
+                          submitted && formMesaTramite.get('folio')?.invalid
+                      }"
+                      formControlName="folio"
+                      maxlength="4"
+                      
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-lg-12">
+                  <label for="asunto">Asunto: </label
+                  ><span class="required">*</span>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i aria-hidden="true" class="far fa-sticky-note"></i
+                      ></span>
+                    </div>
+                    <textarea
+                      class="form-control ng-pristine ng-invalid ng-touched"
+                      [ngClass]="{
+                        'form-control form-control': true,
+                        'is-invalid':
+                          submitted && formMesaTramite.get('asunto')?.invalid
+                      }"
+                      formControlName="asunto"
+                      placeholder="Ingrese el asunto del documento"
+                      rows="3"
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  class="alert alert-primary font-weight-bold text-primary col-lg-12"
+                >
+                  3. ADJUNTAR DOCUMENTO
+                </div>
+              </div>
+              <!---->
+              <div class="row">
+                <div class="form-group col-lg-12">
+                  <div class="row">
+                    <span>Adjuntar documento principal</span>
+                    <div class="form-group col-lg-12">
+                      <span> Adjuntar </span><span>documento principal </span
+                      ><b> </b>
+                      <input
+                        type="file"
+                        class="custom-file-input"
+                        id="validatedCustomFile"
+                        (change)="enviarArchivos($event,1); control1.reset()"
+                        accept="application/pdf"
+                        [formControl]="control1"
+                        required
+                      />
+                      <div class="col-md-12">
+                        <table class="table table-striped table-hover">
+                          <tbody>
+                            <tr
+                              *ngFor="let item of adjuntar_doc_princ; let i = index"
+                            >
+                              <td width="90%">
+                                <b
+                                  ><span class="v-align-middle">{{item.name_primary}}</span></b
+                                >
+                              </td>
+                             
+                              <td width="10%" style="text-align: center">
+                                <mat-icon
+                                  (click)="deleteArchivoAdj(item)"
+                                  class="icon-mat"
+                                  
+                                  matTooltip="Eliminar"
+                                  >delete</mat-icon
+                                >
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      
+                      <label class="custom-file-label" for="validatedCustomFile"
+                        >Seleccione un archivo</label
+                      >
+                      <!---->
+                    </div>
+                  </div>
+                  <br>
+                  <br>
+                  <div class="row">
+                    <span>Anexos</span>
+                    <div class="form-group col-lg-12">
+                      <input
+                        type="file"
+                        class="custom-file-input"
+                        id="validatedCustomFile"
+                        (change)="enviarArchivos($event,2); control2.reset()"
+                        accept="application/pdf"
+                        [formControl]="control2"
+                        required
+                      />
+
+                      <div class="col-md-12">
+                        <table class="table table-striped table-hover">
+                          <tbody>
+                            <tr
+                              *ngFor="let item of anexos; let i = index"
+                            >
+                              <td width="90%">
+                                <b
+                                  ><span class="v-align-middle">{{item.name_primary}}</span></b
+                                >
+                              </td>
+                             
+                              <td width="10%" style="text-align: center">
+                                <mat-icon
+                                  (click)="deleteArchivoAn(item)"
+                                  color="warn"
+                                  class="v-align-middle"
+                                  matTooltip="Eliminar"
+                                  >delete</mat-icon
+                                >
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <label class="custom-file-label" for="validatedCustomFile"
+                        >Seleccione un archivo</label
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!---->
+              <hr />
+              <div class="advertencia" align="left">
+                *Para el documento principal y anexos el formato debe ser PDF.*
+                Tamaño maximo de los archivos debe ser menor o igual a 10MB.
+              </div>
+              <div align="right">
+                <a>
+                    <button
+                        (click)="EnviarDocumento()"
+                        class="btn btn-success"
+                        ngbautofocus=""
+                        type="submit">
+                        <i aria-hidden="true" class="fas fa-address-book"></i>
+                        Enviar
+                    </button>
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>

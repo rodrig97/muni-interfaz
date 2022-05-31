@@ -1,0 +1,15 @@
+.custom-file-input ~ .custom-file-label::after {
+    content: "\f1c1";
+      font-family: FontAwesome;
+      font-weight: bold;
+      font-style: normal;
+      font-size: 1em;
+      line-height: 20px;
+      color: rgb(107, 101, 101);
+}
+
+div.center-div {
+    position:relative;
+    margin-top: 2.6vw;
+    left:12%;
+}

@@ -1,0 +1,159 @@
+<div class="modal-header" style="background: rgb(232, 231, 231)">
+  <h6 class="modal-title" id="modal-basic-title">
+    RECEPCION Y DERIVACION DE EXPEDIENTE
+  </h6>
+</div>
+<div class="modal-body modal-delete">
+  <div class="p-2">
+    <form
+      class="user ng-untouched ng-pristine ng-valid"
+      [formGroup]="formOperacion"
+    >
+      <div class="row">
+        <div
+          class="alert alert-primary font-weight-bold text-primary col-lg-12"
+        >
+          DESTINO A DERIVAR
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-3">
+          <label for="relacionado">Relacionado a Expe.</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"
+                ><i aria-hidden="true" class="fas fa-sort-numeric-up"></i
+              ></span>
+            </div>
+            <input
+              appnumberonly=""
+              class="form-control ng-untouched ng-pristine ng-valid"
+              formControlName="relacionado"
+              maxlength="20"
+              name="relacionado"
+            />
+          </div>
+        </div>
+        <div class="form-group col-lg-2">
+          <label for="codigo">Codigo</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"
+                ><i aria-hidden="true" class="fas fa-sort-numeric-up"></i></span
+              ><input
+                required
+                class="form-control"
+                formControlName="codigo"
+                maxlength="8"
+                [readonly]="!dependencias.length"
+                (input)="filtrarDependencia()"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-lg-5">
+          <label for="dependencia">Dependencia</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"
+                ><i aria-hidden="true" class="far fa-sticky-note"></i
+              ></span>
+            </div>
+            <select class="form-control" formControlName="depe_id" (click)="this.formOperacion.controls['codigo'].setValue(this.formOperacion.value.depe_id)" >
+              <option  *ngFor="let item of dependencias" [value]="item.depe_id">
+                {{ item.depe_nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-check col-lg-2" style="padding-left: 32px">
+          <input
+            class="form-check-input ng-untouched ng-pristine ng-valid"
+            formControlName="oper_forma"
+            id="copia"
+            type="checkbox"
+          /><label class="form-check-label" for="copia">Copia</label>
+        </div>
+        <div class="form-group col-lg-12">
+          <label for="proveido">Proveido de Atencion</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"
+                ><i aria-hidden="true" class="far fa-sticky-note"></i
+              ></span>
+            </div>
+            <textarea
+              class="form-control ng-untouched ng-pristine ng-valid"
+              formControlName="oper_acciones"
+              id="descripcion"
+              name="proveido"
+              rows="3"
+            ></textarea>
+          </div>
+          <span></span
+          ><button
+            class="btn btn-success"
+            type="button"
+            (click)="GuardarDestinos()"
+          >
+            Añadir
+          </button>
+        </div>
+      </div>
+    </form>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <table
+          class="table table-bordered"
+          style="font-size: 0.8rem !important"
+          width="100%"
+        >
+          <thead
+            style="
+              text-align: center;
+              font-weight: bold;
+              background: rgb(78, 115, 223, 0.6) !important;
+              color: #fff;
+            "
+          >
+            <tr>
+              <th scope="col" width="10%">Forma</th>
+              <th scope="col" width="45%">Dependencia</th>
+              <th scope="col" width="40%">Proveido de atencion</th>
+              <th scope="col" width="5%">Àcción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of destinos; let i = index">
+              <td>
+                <b
+                  ><span class="v-align-middle">{{ item.original }}</span></b
+                >
+              </td>
+              <td>
+                <span class="v-align-middle">{{ item.dependencia_name }}</span>
+              </td>
+              <td>
+                <span class="v-align-middle">{{ item.proveido }}</span>
+              </td>
+              <td style="text-align: center">
+                <mat-icon
+                color="accent"
+                  (click)="deleteArch(i)"
+                  class="icon-mat"
+                  matTooltip="Eliminar"
+                  >delete</mat-icon
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary"  type="button" (click)="EnviarOperacion()">
+    Derivar
+  </button>
+</div>

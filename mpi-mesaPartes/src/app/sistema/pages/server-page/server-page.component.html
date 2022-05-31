@@ -1,0 +1,181 @@
+<img
+  src="../../../../assets/img/mpilo_logo.png"
+  alt=""
+  weight="90px"
+  height="90px"
+  class="img1"
+/>
+<hr />
+
+<mat-card class="table-card">
+  <mat-card>
+    <mat-card-title>
+      <h4>Mesa de Partes</h4>
+      <hr />
+    </mat-card-title>
+    <div class="field grid">
+      <button
+        type="button"
+        pButton
+        pRipple
+        icon="pi pi-file-excel"
+        (click)="exportExcel()"
+        class="p-button-success mr-2"
+        pTooltip="XLS"
+        tooltipPosition="bottom"
+      ></button>
+      <!--<button
+        type="button"
+        pButton
+        pRipple
+        icon="pi pi-file"
+        (click)="exportExcel()"
+        class="mr-2"
+        pTooltip="XLS"
+        tooltipPosition="bottom"
+      ></button>-->
+      <button
+        type="button"
+        pButton
+        pRipple
+        icon="pi pi-file-pdf"
+        (click)="exportPdf()"
+        class="p-button-warning mr-2"
+        pTooltip="PDF"
+        tooltipPosition="bottom"
+      ></button>
+      <!--
+        <button
+        type="button"
+        pButton
+        pRipple
+        icon="pi pi-filter"
+        (click)="dt.exportCSV({ selectionOnly: true })"
+        class="p-button-info ml-auto"
+        pTooltip="Selection Only"
+        tooltipPosition="bottom"
+      ></button>
+      -->
+      
+    </div>
+  </mat-card>
+
+  <p-table
+    #dt
+    [columns]="cols"
+    [value]="documentos"
+    (sortFunction)="customSort($event)"
+    [customSort]="true"
+    selectionMode="multiple"
+    responsiveLayout="scroll"
+    [exportHeader]="'customExportHeader'"
+    [paginator]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando registros del {first} al {last} de un total de {totalRecords} registros"
+    [rowsPerPageOptions]="[10, 15, 20]"
+    class="p-table"
+  >
+    <br />
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Buscar"
+          />
+        </span>
+      </div>
+    </ng-template>
+    <br /><br />
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <!--pSortableColumn="{{ col.header }}"-->
+        <!-- <p-sortIcon field="code" ></p-sortIcon>-->
+        <th  *ngFor="let col of columns">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+         
+          <div *ngIf="col.type == 'json'">
+            
+           <div *ngIf="rowData[col.field].length == null">
+              <a [matTooltip]="rowData[col.field]['name_primary']" target="_blank" [href]="backendpdfs+'/'+rowData[col.field]['path_primary']">
+                <mat-icon color="primary">remove_red_eye</mat-icon>
+              </a>
+            </div>
+            <div *ngIf="rowData[col.field].length>0">
+              <div *ngFor="let j of rowData[col.field]">
+                <a [matTooltip]="j['name_primary']" target="_blank" [href]="backendpdfs+'/'+j['path_primary']">
+                  <mat-icon color="primary">remove_red_eye</mat-icon>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!--<div *ngIf="col.type == 'text'>-->
+            <!--
+              <div *ngIf="col.field == 'tipo_doc' && rowData[col.field] == 1">
+                PERSONA NATURAL
+              </div >
+            -->
+          <div *ngIf="col.field == 'ndocumento' || col.field == 'asunto' || col.field == 'nombres' || col.field == 'ndoc' || col.header == 'Sisgedo'">
+            {{ rowData[col.field] }}
+          </div>
+
+          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '1'">
+            OFICIO
+          </div >
+          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '5'">
+            CARTA
+          </div >
+          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '6'">
+            SOLICITUD-OTROS
+          </div >
+          
+          <div *ngIf="col.type == 'date'">
+            {{ rowData[col.field] | date: 'mediumDate'}}
+          </div>
+          <div *ngIf="col.type == 'time'">
+            {{ rowData[col.field] | date: 'shortTime'}}
+          </div>
+          <div class="btn-group" *ngIf="col.type == 'accion'">
+            <button
+              class="btn btn-sm btn-primary view_send_mail btn-circle"
+              (click)="openDialog(rowData)"><i class="far fa-envelope"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-info view_reclamo btn-circle"
+              (click)="openDialog1(rowData)"><i class="fas fa-info-circle"></i>
+            </button>
+            
+            <div *ngIf="rowData[col.field] == null">
+              <button class="btn btn-sm btn-danger receive btn-circle"
+              (click)="openDialog2(rowData)"><i class="fas fa-file-import"></i>
+              </button>
+            </div>
+            <!--
+              <div *ngIf=" rowData[col.field]!= null">
+              {{ rowData[col.field] }}
+            </div>
+            -->
+            
+          </div>
+        </td>
+        
+      </tr>
+    </ng-template>
+    <!------------------------------------------------------------------------------------>
+  </p-table>
+</mat-card>
+<footer class="footer" align="center">
+  Copyright © Sub Gerencia de Informatica - MPI
+</footer>
+
