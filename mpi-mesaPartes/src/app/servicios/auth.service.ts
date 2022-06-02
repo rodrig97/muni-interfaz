@@ -18,4 +18,8 @@ export class LoginService {
   login(data: any): Observable<any> {
     return this.http.post(`${backendApi}/login`, data);
   }
+
+  /*logout(): Observable<any>{
+    return this.http.get(`${backendApi}/logout`);
+  }*/
 }

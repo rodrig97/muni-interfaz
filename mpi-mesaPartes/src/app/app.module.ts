@@ -24,7 +24,8 @@ import { InterceptorService } from './loader/interceptor.service';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DialogSisgComponent } from './sistema/componentesSisgedo/dialog-sisg/dialog-sisg.component';
-
+import { ComponentesPdfsComponent } from './sistema/componentes-pdfs/componentes-pdfs.component';
+import { DialogModule } from 'primeng/dialog';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +35,8 @@ import { DialogSisgComponent } from './sistema/componentesSisgedo/dialog-sisg/di
     DialogDniComponent,
     DialogEmailComponent,
     DialogInfoComponent,
-    DialogSisgComponent
+    DialogSisgComponent,
+    ComponentesPdfsComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,8 @@ import { DialogSisgComponent } from './sistema/componentesSisgedo/dialog-sisg/di
     TableModule,
     ButtonModule,
     InputTextModule,
-    PdfViewerModule 
+    PdfViewerModule ,
+    DialogModule
   ],
   providers: [
     

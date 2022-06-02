@@ -7,7 +7,6 @@ import { Swal2Service } from 'src/app/servicios/swal2.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MPVService } from 'src/app/servicios/mpv.service';
 
-
 @Component({
   selector: 'app-dialog-sisg',
   templateUrl: './dialog-sisg.component.html',
@@ -25,8 +24,8 @@ export class DialogSisgComponent implements OnInit {
     private DependenciasService: DependenciasService,
     private QueryService: QueryService,
     private Swal2Service: Swal2Service,
-    private MPVService:MPVService,
-    public modalBaseDialogRef: MatDialogRef<DialogSisgComponent>,
+    private MPVService: MPVService,
+    public modalBaseDialogRef: MatDialogRef<DialogSisgComponent>
   ) {
     //console.log(this.data);
     this.formOperacion.patchValue(this.data);
@@ -105,12 +104,21 @@ export class DialogSisgComponent implements OnInit {
 
   EnviarOperacion() {
     //console.log(this.formMesaTramite);
+    console.log(this.data);
     if (this.destinos.length > 0) {
       this.formOperacion.controls['destinos'].setValue(this.destinos);
       //console.log(1);
-      this.MPVService.createExpedienteSisgedo(this.formOperacion.value).subscribe(
+      let array = {
+        documentos: this.data.documentos.documentos,
+        anexos: this.data.documentos.anexos,
+      };
+      this.formOperacion.controls['adjuntar_doc_princ'].setValue(array);
+
+      this.MPVService.createExpedienteSisgedo(
+        this.formOperacion.value
+      ).subscribe(
         (resp: any) => {
-          if(resp.validated){
+          if (resp.validated) {
             this.Swal2Service.alertaToast(
               'Guardado',
               'Se guardó con éxito',

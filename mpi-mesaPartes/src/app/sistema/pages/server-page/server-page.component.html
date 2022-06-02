@@ -5,6 +5,17 @@
   height="90px"
   class="img1"
 />
+<mat-icon
+  ><button mat-icon-button>
+    <mat-icon
+      color="primary"
+      class="label-out"
+      matTooltip="Salir de sesión"
+      (click)="logout()"
+      >logout</mat-icon
+    >
+  </button></mat-icon
+>
 <hr />
 
 <mat-card class="table-card">
@@ -56,7 +67,6 @@
         tooltipPosition="bottom"
       ></button>
       -->
-      
     </div>
   </mat-card>
 
@@ -95,70 +105,104 @@
       <tr>
         <!--pSortableColumn="{{ col.header }}"-->
         <!-- <p-sortIcon field="code" ></p-sortIcon>-->
-        <th  *ngFor="let col of columns">
+        <th *ngFor="let col of columns">
           {{ col.header }}
         </th>
       </tr>
     </ng-template>
-    
+
     <ng-template pTemplate="body" let-rowData let-columns="columns">
       <tr>
         <td *ngFor="let col of columns">
-         
-          <div *ngIf="col.type == 'json'">
-            
-           <div *ngIf="rowData[col.field].length == null">
-              <a [matTooltip]="rowData[col.field]['name_primary']" target="_blank" [href]="backendpdfs+'/'+rowData[col.field]['path_primary']">
-                <mat-icon color="primary">remove_red_eye</mat-icon>
-              </a>
-            </div>
-            <div *ngIf="rowData[col.field].length>0">
-              <div *ngFor="let j of rowData[col.field]">
-                <a [matTooltip]="j['name_primary']" target="_blank" [href]="backendpdfs+'/'+j['path_primary']">
-                  <mat-icon color="primary">remove_red_eye</mat-icon>
+          <div *ngIf="rowData[col.field]">
+            <div *ngIf="col.type == 'json'">
+              <div *ngIf="rowData[col.field].length == null">
+                <a>
+                  <!--[matTooltip]="rowData[col.field]['name_primary']"
+                  target="_blank"
+                  [href]="
+                    backendpdfs + '/' + rowData[col.field]['path_primary']
+                  "-->
+                  <mat-icon
+                    (click)="openDocumentos(rowData[col.field])"
+                    color="primary"
+                    >remove_red_eye</mat-icon
+                  >
                 </a>
+              </div>
+              <div *ngIf="rowData[col.field].length > 0">
+                <div *ngFor="let j of rowData[col.field]">
+                  <a
+                    [matTooltip]="j['name_primary']"
+                    target="_blank"
+                    [href]="backendpdfs + '/' + j['path_primary']"
+                  >
+                    <mat-icon color="primary">remove_red_eye</mat-icon>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
           <!--<div *ngIf="col.type == 'text'>-->
-            <!--
+          <!--
               <div *ngIf="col.field == 'tipo_doc' && rowData[col.field] == 1">
                 PERSONA NATURAL
               </div >
             -->
-          <div *ngIf="col.field == 'ndocumento' || col.field == 'asunto' || col.field == 'nombres' || col.field == 'ndoc' || col.header == 'Sisgedo'">
+          <div
+            *ngIf="
+              col.field == 'ndocumento' ||
+              col.field == 'asunto' ||
+              col.field == 'nombres' ||
+              col.field == 'ndoc' ||
+              col.header == 'Sisgedo'
+            "
+          >
             {{ rowData[col.field] }}
           </div>
 
-          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '1'">
+          <div
+            *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '1'"
+          >
             OFICIO
-          </div >
-          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '5'">
+          </div>
+          <div
+            *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '5'"
+          >
             CARTA
-          </div >
-          <div *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '6'">
+          </div>
+          <div
+            *ngIf="col.field == 'tipo_documento' && rowData[col.field] == '6'"
+          >
             SOLICITUD-OTROS
-          </div >
-          
+          </div>
+
           <div *ngIf="col.type == 'date'">
-            {{ rowData[col.field] | date: 'mediumDate'}}
+            {{ rowData[col.field] | date: "mediumDate" }}
           </div>
           <div *ngIf="col.type == 'time'">
-            {{ rowData[col.field] | date: 'shortTime'}}
+            {{ rowData[col.field] | date: "shortTime" }}
           </div>
           <div class="btn-group" *ngIf="col.type == 'accion'">
             <button
               class="btn btn-sm btn-primary view_send_mail btn-circle"
-              (click)="openDialog(rowData)"><i class="far fa-envelope"></i>
+              (click)="openDialog(rowData)"
+            >
+              <i class="far fa-envelope"></i>
             </button>
             <button
               class="btn btn-sm btn-info view_reclamo btn-circle"
-              (click)="openDialog1(rowData)"><i class="fas fa-info-circle"></i>
+              (click)="openDialog1(rowData)"
+            >
+              <i class="fas fa-info-circle"></i>
             </button>
-            
+
             <div *ngIf="rowData[col.field] == null">
-              <button class="btn btn-sm btn-danger receive btn-circle"
-              (click)="openDialog2(rowData)"><i class="fas fa-file-import"></i>
+              <button
+                class="btn btn-sm btn-danger receive btn-circle"
+                (click)="openDialog2(rowData)"
+              >
+                <i class="fas fa-file-import"></i>
               </button>
             </div>
             <!--
@@ -166,10 +210,8 @@
               {{ rowData[col.field] }}
             </div>
             -->
-            
           </div>
         </td>
-        
       </tr>
     </ng-template>
     <!------------------------------------------------------------------------------------>
@@ -179,3 +221,82 @@
   Copyright © Sub Gerencia de Informatica - MPI
 </footer>
 
+<p-dialog
+  header="Lista de Documentos y Anexos"
+  [(visible)]="displayBasic"
+  [style]="{ width: '70vw' }"
+  [baseZIndex]="10000"
+>
+<b>Doc. Principal</b>
+  <table class="table">
+    
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Accion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data_documentos.documentos; let i = index">
+        
+        <td>
+          {{ i + 1 }}
+        </td>
+        <td>
+          {{ item.name_primary }}
+        </td>
+        <td>
+          <a
+            [matTooltip]="item.name_primary"
+            target="_blank"
+            [href]="backendpdfs + '/' + item.path_primary"
+          >
+            <mat-icon color="primary">remove_red_eye</mat-icon>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <b>Anexos</b>
+  <table class="table">
+    
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Accion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data_documentos.anexos; let i = index">
+        
+        <td>
+          {{ i + 1 }}
+        </td>
+        <td>
+          {{ item.name_primary }}
+        </td>
+        <td>
+          <a
+            [matTooltip]="item.name_primary"
+            target="_blank"
+            [href]="backendpdfs + '/' + item.path_primary"
+          >
+            <mat-icon color="primary">remove_red_eye</mat-icon>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      icon="pi pi-check"
+      (click)="displayBasic = false"
+      label="Cerrar"
+      styleClass="p-button-text"
+    ></p-button>
+  </ng-template>
+</p-dialog>

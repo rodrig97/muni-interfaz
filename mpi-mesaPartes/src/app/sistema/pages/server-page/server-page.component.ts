@@ -16,6 +16,8 @@ import {
 } from '@angular/material/dialog';
 import { DialogInfoComponent } from '../../componentesInfo/dialog-info/dialog-info.component';
 import { DialogSisgComponent } from '../../componentesSisgedo/dialog-sisg/dialog-sisg.component';
+import { TokenStorageService } from 'src/app/shared/token/token.service';
+import { ComponentesPdfsComponent } from '../../componentes-pdfs/componentes-pdfs.component';
 
 
 @Component({
@@ -34,7 +36,8 @@ export class ServerPageComponent implements OnInit {
   documentos: any = [];
 
 
-  constructor(private MPVService: MPVService, private dialog: MatDialog, private DialogInfoComponent:DialogInfoComponent) {
+  constructor(private MPVService: MPVService, private dialog: MatDialog,
+    private DialogInfoComponent:DialogInfoComponent,private tokenStorageService:TokenStorageService) {
     
     this.getAllDataMPV();
   }
@@ -50,7 +53,7 @@ export class ServerPageComponent implements OnInit {
             ) : '';
           }
         }
-        //console.log(this.documentos);
+        console.log(this.documentos);
       },
       (err: any) => {}
     );
@@ -181,15 +184,6 @@ export class ServerPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {});
   }
 
-  /*openDialog2(data:any) {
-    //console.log(data)
-    const dialogRef = this.dialog.open(DialogPdfsComponent, {
-      width: '800px',
-      data:data
-
-    dialogRef.afterClosed().subscribe((result) => {});
-  }*/
-
   openDialog2(data:any){
     const dialogRef = this.dialog.open(DialogSisgComponent,{
       width: '800px',
@@ -199,4 +193,24 @@ export class ServerPageComponent implements OnInit {
       this.getAllDataMPV();
     });
   }
+
+  logout(): void {
+    this.tokenStorageService.signOut();
+    window.location.reload();
+  }
+
+  displayBasic!: boolean;
+  data_documentos:any=[]
+  openDocumentos(data:any){
+    this.displayBasic = true;
+    this.data_documentos=data;
+    /*const dialogRef = this.dialog.open(ComponentesPdfsComponent,{
+      width: '800px',
+      data:data
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      
+    });*/
+  }
+
 }

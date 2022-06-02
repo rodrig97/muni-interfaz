@@ -83,4 +83,8 @@ export class LoginComponent implements OnInit {
       }
     );
   }
+
+  onLogOut(){
+    this.loading = true;
+  }
 }

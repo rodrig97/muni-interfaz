@@ -63,17 +63,27 @@ export class MesaTramiteComponent implements OnInit {
         this.formMesaTramite.value.nroVerifDNI
       ).subscribe(
         (resp: any) => {
-          if(Number(resp.codVerifica) ==  Number(this.formMesaTramite.value.nroVerifDNI)){
+          if (
+            Number(resp.codVerifica) ==
+            Number(this.formMesaTramite.value.nroVerifDNI)
+          ) {
             this.formMesaTramite.controls['nombres'].setValue(
-              resp.nombres + ' ' + resp.apellidoPaterno + ' ' + resp.apellidoMaterno
+              resp.nombres +
+                ' ' +
+                resp.apellidoPaterno +
+                ' ' +
+                resp.apellidoMaterno
             );
-          }
-          else {
-            this.Swal2Service.alertaToast('ATENCIÓN', 'Código verificador erróneo', 'warning');
+          } else {
+            this.Swal2Service.alertaToast(
+              'ATENCIÓN',
+              'Código verificador erróneo',
+              'warning'
+            );
             this.formMesaTramite.controls['nombres'].setValue(null);
           }
           //console.log(resp)
-          
+
           /*let data = JSON.parse(resp.data);
           console.log(data);
           if (resp.validated) {
@@ -87,7 +97,6 @@ export class MesaTramiteComponent implements OnInit {
         },
         (error: any) => {
           //console.log(error)
-         
         }
       );
     } else {
@@ -148,17 +157,17 @@ export class MesaTramiteComponent implements OnInit {
 		}
 		return "";
   }*/
+  array: any = [];
   EnviarDocumento() {
     this.submitted = true;
-    this.adjuntar_doc_princ.length > 0
-      ? (this.adjuntar_doc_princ['anexos'] = this.anexos)
-      : '';
+    this.array = null;
+    this.array = { documentos: this.adjuntar_doc_princ, anexos: this.anexos };
     this.formMesaTramite.controls['adjuntar_doc_princ'].setValue(
-      this.adjuntar_doc_princ
+      this.array
     );
 
-    this.formMesaTramite.controls['anexos'].setValue(this.anexos);
-    //console.log(this.formMesaTramite);
+    //console.log(this.formMesaTramite.value);
+
     if (this.formMesaTramite.valid) {
       this.MPVService.saveTramiteSGD(this.formMesaTramite.value).subscribe(
         (resp: any) => {
