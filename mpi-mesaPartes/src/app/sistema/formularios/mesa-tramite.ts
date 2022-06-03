@@ -18,6 +18,6 @@ export const formMesaTramite: any = new FormGroup({
     adjuntar_doc_princ: new FormControl(''),
     nombreArchivo: new FormControl(''),
     anexos: new FormControl(''),
-    
+    created_at:new FormControl(''),
    
 });
