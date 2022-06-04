@@ -67,6 +67,7 @@ export class MesaTramiteComponent implements OnInit {
             Number(resp.codVerifica) ==
             Number(this.formMesaTramite.value.nroVerifDNI)
           ) {
+            console.log(resp);
             this.formMesaTramite.controls['nombres'].setValue(
               resp.nombres +
                 ' ' +

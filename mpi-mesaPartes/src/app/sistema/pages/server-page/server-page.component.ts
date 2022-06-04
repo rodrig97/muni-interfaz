@@ -18,6 +18,8 @@ import { DialogInfoComponent } from '../../componentesInfo/dialog-info/dialog-in
 import { DialogSisgComponent } from '../../componentesSisgedo/dialog-sisg/dialog-sisg.component';
 import { TokenStorageService } from 'src/app/shared/token/token.service';
 import { ComponentesPdfsComponent } from '../../componentes-pdfs/componentes-pdfs.component';
+import { formMesaTramite } from '../../formularios/mesa-tramite';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -26,6 +28,8 @@ import { ComponentesPdfsComponent } from '../../componentes-pdfs/componentes-pdf
   styleUrls: ['./server-page.component.scss'],
 })
 export class ServerPageComponent implements OnInit {
+
+  formMesaTramite: FormGroup = formMesaTramite;
   
   backendpdfs = environment.backendpdfs;
   first = 0;
@@ -38,7 +42,7 @@ export class ServerPageComponent implements OnInit {
 
   constructor(private MPVService: MPVService, private dialog: MatDialog,
     private DialogInfoComponent:DialogInfoComponent,private tokenStorageService:TokenStorageService) {
-    
+      //this.verifFecha()
     this.getAllDataMPV();
   }
 
@@ -211,6 +215,22 @@ export class ServerPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       
     });*/
+  }
+
+  verifFecha(){
+    this.MPVService.getAllDataMPV().subscribe(
+      //this.formMesaTramite.value.created_at == null
+      (data:any) => {
+        for (let i = 0; i < data.data.length; i ++){
+          if (data.data[i]['created_at'] != null) {
+            this.formMesaTramite.value.created_at = data.data[i]['created_at'];
+          }
+        }
+        //console.log(data.data[1]['created_at']);
+        
+      }
+    )
+    
   }
 
 }
