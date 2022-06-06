@@ -124,9 +124,9 @@
                     backendpdfs + '/' + rowData[col.field]['path_primary']
                   "-->
                   <mat-icon
-                    (click)="openDocumentos(rowData[col.field])"
+                    (click)="openDocumentos(rowData[col.field],rowData )"
                     color="primary"
-                    (click)="verifFecha()"
+                    
                     >remove_red_eye</mat-icon
                   >
                 </a>
@@ -138,7 +138,7 @@
                     target="_blank"
                     [href]="backendpdfs + '/' + j['path_primary']"
                   >
-                    <mat-icon color="primary">remove_red_eye</mat-icon>
+                    <mat-icon color="primary" >remove_red_eye</mat-icon>
                   </a>
                 </div>
               </div>
@@ -238,8 +238,8 @@
         <th scope="col">Accion</th>
       </tr>
     </thead>
-    <tbody>
-      <tr *ngFor="let item of data_documentos.documentos; let i = index">
+    <tbody *ngIf="!this.data_documentos.name_primary">
+      <tr *ngFor="let item of data_documentos.documentos; let i = index" >
         
         <td>
           {{ i + 1 }}
@@ -252,6 +252,27 @@
             [matTooltip]="item.name_primary"
             target="_blank"
             [href]="backendpdfs + '/' + item.path_primary"
+            (click)="verifFecha(item)"
+          >
+            <mat-icon color="primary">remove_red_eye</mat-icon>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+      <tbody  *ngIf="this.data_documentos.name_primary">
+      <tr>
+        <td>
+          1
+        </td>
+        <td>
+          {{ data_documentos.name_primary }}
+        </td>
+        <td>
+          <a
+            [matTooltip]="data_documentos.name_primary"
+            target="_blank"
+            [href]="backendpdfs + '/' + data_documentos.path_primary"
+            (click)="verifFecha(data_documentos)"
           >
             <mat-icon color="primary">remove_red_eye</mat-icon>
           </a>
@@ -260,8 +281,8 @@
     </tbody>
   </table>
   <br>
-  <b>Anexos</b>
-  <table class="table">
+  <b *ngIf="!this.data_documentos.name_primary">Anexos</b>
+  <table class="table" *ngIf="!this.data_documentos.name_primary">
     
     <thead class="thead-dark">
       <tr>
@@ -284,6 +305,7 @@
             [matTooltip]="item.name_primary"
             target="_blank"
             [href]="backendpdfs + '/' + item.path_primary"
+            (click)="verifFecha(item)"
           >
             <mat-icon color="primary">remove_red_eye</mat-icon>
           </a>

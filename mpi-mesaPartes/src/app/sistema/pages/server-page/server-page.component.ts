@@ -57,7 +57,7 @@ export class ServerPageComponent implements OnInit {
             ) : '';
           }
         }
-        console.log(this.documentos);
+        //console.log(this.documentos);
       },
       (err: any) => {}
     );
@@ -205,9 +205,31 @@ export class ServerPageComponent implements OnInit {
 
   displayBasic!: boolean;
   data_documentos:any=[]
-  openDocumentos(data:any){
+  openDocumentos(data:any, item:any){
     this.displayBasic = true;
     this.data_documentos=data;
+    //console.log(item)
+    // ESTO FUNCIONARÁ PARA LOS DOCUMENTOS DEL ANTIGUO FORMATO...
+    if(this.data_documentos.name_primary){
+      let val = {
+        expe_id:item.expe_id, // TABLA EXPEDIENTE
+        fecha_creacion: item.created_at, // FECHA DE DERIVACIÓN
+        name_primary:this.data_documentos.name_primary,
+        path_primary:this.data_documentos.path_primary,
+        id:item.id // TABLA MPVIRTUAL PARA SACAR LA FECHA DE CREACIÓN
+      }
+
+      this.MPVService.getDocumento(val).subscribe(
+        (data: any) => {
+          console.log(data);
+        },
+        (err: any) => { console.log(err);}
+      );
+
+    }
+    
+    console.log(this.data_documentos.name_primary)
+    console.log(this.data_documentos.path_primary)
     /*const dialogRef = this.dialog.open(ComponentesPdfsComponent,{
       width: '800px',
       data:data
@@ -217,18 +239,38 @@ export class ServerPageComponent implements OnInit {
     });*/
   }
 
-  verifFecha(){
+  arrCreated_At:any = [];
+  verifFecha(doc:any){
+    
     this.MPVService.getAllDataMPV().subscribe(
       //this.formMesaTramite.value.created_at == null
+      
       (data:any) => {
+        console.log(this.arrCreated_At[0]);
+        console.log(data.data[0]['created_at']);
+        console.log(data.data[0]);
+        console.log(this.formMesaTramite.value.created_at);
         for (let i = 0; i < data.data.length; i ++){
           if (data.data[i]['created_at'] != null) {
-            this.formMesaTramite.value.created_at = data.data[i]['created_at'];
+            this.arrCreated_At[i] = data.data[i]['created_at'];
+            //this.formMesaTramite.value.created_at
+          }
+          else {
+            this.arrCreated_At = '';
           }
         }
+        console.log(doc);
+        //this.cols.col.field;
+        //this.formMesaTramite.value.created_at = this.arrCreated_At;
+        // for (let col of this.cols){
+        //   console.log(col.field['created_at']);
+        //   console.log(doc);
+        // }
+        
         //console.log(data.data[1]['created_at']);
         
-      }
+      },
+      (err: any) => {}
     )
     
   }

@@ -20,7 +20,7 @@ export class DialogInfoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data:any = [],
     public modalBaseDialogRef: MatDialogRef<DialogInfoComponent>,
     ) {
-    console.log(this.data)
+    //console.log(this.data)
     this.formMesaTramite.patchValue(this.data);
    }
 

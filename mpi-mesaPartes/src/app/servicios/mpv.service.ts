@@ -28,6 +28,9 @@ export class MPVService {
     public createExpedienteSisgedo(data:any){
         return this.http.post(`${this.backendApi}/mpvirtual/createExpedienteSisgedo/`, data);
     }
+    public getDocumento(data:any){
+        return this.http.post(`${this.backendApi}/mpvirtual/getDocumento/`, data);
+    }
 /*
     public enviarCorreo(req: Request, expe_id: any, content: any, mode: any){
         return this.http.post(`${this.backendApi}/reclamos/presentar`, req);
