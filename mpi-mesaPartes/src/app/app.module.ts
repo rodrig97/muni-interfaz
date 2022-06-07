@@ -26,6 +26,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DialogSisgComponent } from './sistema/componentesSisgedo/dialog-sisg/dialog-sisg.component';
 import { ComponentesPdfsComponent } from './sistema/componentes-pdfs/componentes-pdfs.component';
 import { DialogModule } from 'primeng/dialog';
+import { ToolbarModule } from 'primeng/toolbar';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,7 +52,8 @@ import { DialogModule } from 'primeng/dialog';
     ButtonModule,
     InputTextModule,
     PdfViewerModule ,
-    DialogModule
+    DialogModule,
+    ToolbarModule
   ],
   providers: [
     
