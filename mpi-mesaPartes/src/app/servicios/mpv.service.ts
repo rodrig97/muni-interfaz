@@ -31,6 +31,9 @@ export class MPVService {
     public getDocumento(data:any){
         return this.http.post(`${this.backendApi}/mpvirtual/getDocumento/`, data);
     }
+    public getSearchDocumento(data:any){
+        return this.http.post(`${this.backendApi}/mpvirtual/getSearchDocumento/`, data);
+    }
 /*
     public enviarCorreo(req: Request, expe_id: any, content: any, mode: any){
         return this.http.post(`${this.backendApi}/reclamos/presentar`, req);

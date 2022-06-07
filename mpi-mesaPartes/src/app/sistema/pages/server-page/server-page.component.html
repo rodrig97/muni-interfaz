@@ -136,8 +136,9 @@
                   <a
                     [matTooltip]="j['name_primary']"
                     target="_blank"
-                    [href]="backendpdfs + '/' + j['path_primary']"
-                  >
+                    
+                    (click)="verficarArchivo(j['path_primary'])"
+                  ><!--[href]="backendpdfs + '/' + j['path_primary']"-->
                     <mat-icon color="primary" >remove_red_eye</mat-icon>
                   </a>
                 </div>
@@ -251,9 +252,10 @@
           <a
             [matTooltip]="item.name_primary"
             target="_blank"
-            [href]="backendpdfs + '/' + item.path_primary"
-            (click)="verifFecha(item)"
+            (click)="verficarArchivo(item.path_primary)"
+            
           >
+           <!--[href]="backendpdfs + '/' + item.path_primary"-->
             <mat-icon color="primary">remove_red_eye</mat-icon>
           </a>
         </td>
@@ -269,11 +271,14 @@
         </td>
         <td>
           <a
+           
             [matTooltip]="data_documentos.name_primary"
             target="_blank"
-            [href]="backendpdfs + '/' + data_documentos.path_primary"
-            (click)="verifFecha(data_documentos)"
+            
+            (click)="verficarArchivo(data_documentos.path_primary)"
+            
           >
+          <!--[href]="backendpdfs + '/' + data_documentos.path_primary"-->
             <mat-icon color="primary">remove_red_eye</mat-icon>
           </a>
         </td>
@@ -304,9 +309,12 @@
           <a
             [matTooltip]="item.name_primary"
             target="_blank"
-            [href]="backendpdfs + '/' + item.path_primary"
-            (click)="verifFecha(item)"
+            
+            (click)="verficarArchivo(item.path_primary)"
+            
+            
           >
+          <!--[href]="backendpdfs + '/' + item.path_primary"-->
             <mat-icon color="primary">remove_red_eye</mat-icon>
           </a>
         </td>
