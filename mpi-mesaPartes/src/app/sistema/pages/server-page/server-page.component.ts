@@ -13,6 +13,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+
 import { Swal2Service } from 'src/app/servicios/swal2.service';
 import { DialogInfoComponent } from '../../componentesInfo/dialog-info/dialog-info.component';
 import { DialogSisgComponent } from '../../componentesSisgedo/dialog-sisg/dialog-sisg.component';
@@ -20,6 +21,7 @@ import { TokenStorageService } from 'src/app/shared/token/token.service';
 import { ComponentesPdfsComponent } from '../../componentes-pdfs/componentes-pdfs.component';
 import { formMesaTramite } from '../../formularios/mesa-tramite';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-server-page',
@@ -36,16 +38,23 @@ export class ServerPageComponent implements OnInit {
   cols: any = [];
   exportColumns: any = [];
   documentos: any = [];
-
+  isLoggedIn:any;
   constructor(
     private MPVService: MPVService,
     private dialog: MatDialog,
     private DialogInfoComponent: DialogInfoComponent,
     private tokenStorageService: TokenStorageService,
-    private Swal2Service: Swal2Service
+    private Swal2Service: Swal2Service,
+    private router: Router,
   ) {
     //this.verifFecha()
-    this.getAllDataMPV();
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+    //console.log(this.isLoggedIn)
+    if (this.isLoggedIn) {
+      this.getAllDataMPV();
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 
   getAllDataMPV() {

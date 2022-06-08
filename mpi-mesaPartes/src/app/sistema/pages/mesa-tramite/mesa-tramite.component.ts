@@ -13,6 +13,10 @@ import {
 } from '@angular/material/dialog';
 import { DialogDniComponent } from '../../componentes/dialog-dni/dialog-dni.component';
 import { QueryService } from 'src/app/servicios/query.service';
+import { LoginComponent } from '../login/login.component';
+import { TokenStorageService } from 'src/app/shared/token/token.service';
+import { environment } from 'src/environments/environment';
+
 
 //import { Script } from 'vm';
 
@@ -29,6 +33,9 @@ export class MesaTramiteComponent implements OnInit {
   myControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
+  isLoggedIn = false;
+  
+  
 
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -36,6 +43,17 @@ export class MesaTramiteComponent implements OnInit {
       map((value: any) => this._filter(value))
     );
   }
+
+  // errorWithLogin(){
+  //   /*this.isLoggedIn = !!this.tokenStorageService.getToken();
+  //   // if((window.location.href == "http://localhost:4200/#/mesa-tramite") && (this.tokenStorage.getToken() || !this.tokenStorage.getToken())){
+  //   //     this.router.navigate(['mesa-tramite']);
+  //   // }
+  //   if((window.location.href == environment.backend + '/#/mesa-tramite') && (this.isLoggedIn || !this.isLoggedIn)){
+  //       this.router.navigate(['mesa-tramite']);
+  //   }
+  //   */
+  // }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
@@ -46,12 +64,16 @@ export class MesaTramiteComponent implements OnInit {
   }
   constructor(
     private PideService: PideService,
+    private tokenStorageService: TokenStorageService,
     private MPVService: MPVService,
     private Swal2Service: Swal2Service,
     private router: Router,
     private dialog: MatDialog,
-    private QueryService: QueryService
-  ) {}
+    private QueryService: QueryService,
+    private tokenStorage: TokenStorageService
+  ) {
+    // this.errorWithLogin();
+  }
   searchDni() {
     if (
       this.formMesaTramite.value.nroDNI.length >= 8 &&

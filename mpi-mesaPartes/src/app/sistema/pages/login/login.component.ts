@@ -27,18 +27,19 @@ export class LoginComponent implements OnInit {
     this.loading = false;
     this.formLogin = this.fb.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
-     
+      password: ['', Validators.required],
     });
   }
 
   async ngOnInit(): Promise<void> {
-    if (this.tokenStorage.getToken()) {
-      this.isLoggedIn = true;
-      if(this.isLoggedIn){
-        this.router.navigate(['server-page']);
-      }
-      
+    this.isLoggedIn = !!this.tokenStorage.getToken();
+    //console.log(this.isLoggedIn)
+    if (this.isLoggedIn) {
+      const user = this.tokenStorage.getUser();
+      this.router.navigate(['server-page']);
+      //this.username = user.user.cCredUsuario;
+    } else {
+      this.router.navigate(['login']);
     }
   }
   onSubmit() {
@@ -84,7 +85,7 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  onLogOut(){
+  onLogOut() {
     this.loading = true;
   }
 }
